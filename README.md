@@ -58,15 +58,31 @@ Run the example script from the repo root:
 
 ```bash
 python examples/scrape_news.py \
-  --query "AI data infrastructure" \
-  --num 10 \
-  --outfile news_ai_data.csv
+  --query "pizza" \
+  --num 5 \
+  --gl ru \
+  --hl es \
+  --outfile news_pizza_ru_es.csv
 ```
 
 Optional flags:
 
 - `--location "United States"` – geo‑target results.
 - `--outfile news.csv` – save results to CSV.
+
+Parameters
+
+The script supports the following Google News parameters (as documented in Thordata Docs):
+
+- `--query / -q` → `q`: search query (required)
+- `--num`        → `num`: number of results
+- `--gl`         → `gl`: country code (e.g. `us`, `ru`, `uk`)
+- `--hl`         → `hl`: interface language (e.g. `en`, `es`, `zh-CN`)
+- `--topic-token`        → `topic_token` (e.g. `World`, `Business`, `Technology`)
+- `--publication-token`  → `publication_token` (e.g. `CNN`, `BBC`)
+- `--section-token`      → `section_token` (e.g. `Business`, `Economy`)
+- `--story-token`        → `story_token` (story ID)
+- `--so`                 → `so`: sort order (`1` for date, default is relevance)
 
 Example output:
 
