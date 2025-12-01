@@ -1,21 +1,32 @@
 """
 Google News Scraper powered by Thordata SERP API.
 
-Features:
-- Search Google News for a given query.
-- Print results as a table.
-- Optionally save to CSV.
+This script is a "full" implementation following the Thordata docs for
+`engine=google_news` and its parameters:
 
-Usage:
+Required:
+  - q                : search query
 
-    1. Copy .env.example to .env and fill in THORDATA_* variables.
-    2. Install deps: pip install -r requirements.txt
-    3. Run:
+Localization:
+  - gl               : country code (e.g. 'us', 'ru', 'uk')
+  - hl               : interface language (e.g. 'en', 'es', 'zh-CN')
 
-        python examples/scrape_news.py \
-            --query "AI data infrastructure" \
-            --num 10 \
-            --outfile news_ai_data.csv
+Advanced:
+  - topic_token      : top-level topic (e.g. 'World', 'Business', 'Technology')
+  - publication_token: publisher token (e.g. 'CNN', 'BBC')
+  - section_token    : section token (e.g. 'Business', 'Economy')
+  - story_token      : story token (specific story ID)
+  - so               : sort order (e.g. '1' for sort by date, default relevance)
+
+Usage (from repo root):
+
+    python examples/scrape_news.py \\
+        --query "AI data infrastructure" \\
+        --num 10 \\
+        --gl us \\
+        --hl en \\
+        --topic Technology \\
+        --outfile news_ai_data.csv
 """
 
 from __future__ import annotations
@@ -28,8 +39,11 @@ from typing import Any, Dict, List, Optional
 import pandas as pd
 from dotenv import load_dotenv
 
-from thordata import ThordataClient, Engine
+from thordata import ThordataClient
 
+# -------------------------------------------------------------
+# Env & client
+# -------------------------------------------------------------
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 ENV_PATH = ROOT_DIR / ".env"
@@ -54,90 +68,196 @@ def build_client() -> ThordataClient:
     )
 
 
+# -------------------------------------------------------------
+# CLI parsing
+# -------------------------------------------------------------
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Google News scraper using Thordata SERP API",
+        description="Google News scraper using Thordata SERP API (engine=google_news)",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
+
+    # Required
     parser.add_argument(
         "--query",
+        "-q",
         type=str,
         required=True,
-        help="Search query for Google News.",
+        help="Search query for Google News (q).",
     )
+
+    # Basic options
     parser.add_argument(
         "--num",
         type=int,
         default=10,
         help="Number of news results to fetch.",
     )
+
+    # Localization
     parser.add_argument(
-        "--location",
+        "--gl",
         type=str,
         default=None,
-        help="Optional location (e.g. 'United States', 'London').",
+        help="Country code (gl), e.g. 'us', 'ru', 'uk'.",
     )
+    parser.add_argument(
+        "--hl",
+        type=str,
+        default=None,
+        help="Interface language (hl), e.g. 'en', 'es', 'zh-CN'.",
+    )
+
+    # Advanced parameters
+    parser.add_argument(
+        "--topic-token",
+        type=str,
+        default=None,
+        help="topic_token: top-level topic (e.g. 'World', 'Business', 'Technology').",
+    )
+    parser.add_argument(
+        "--publication-token",
+        type=str,
+        default=None,
+        help="publication_token: publisher token (e.g. 'CNN', 'BBC').",
+    )
+    parser.add_argument(
+        "--section-token",
+        type=str,
+        default=None,
+        help="section_token: section token (e.g. 'Business', 'Economy').",
+    )
+    parser.add_argument(
+        "--story-token",
+        type=str,
+        default=None,
+        help="story_token: story ID for a specific story.",
+    )
+    parser.add_argument(
+        "--so",
+        type=str,
+        default=None,
+        help="so: sort order (e.g. '1' for sort by date; default is relevance).",
+    )
+
+    # Output
     parser.add_argument(
         "--outfile",
         type=str,
         default=None,
         help="Optional CSV file to save results (e.g. news_results.csv).",
     )
+
     return parser.parse_args()
 
+
+# -------------------------------------------------------------
+# SERP call: engine=google_news
+# -------------------------------------------------------------
 
 def search_google_news(
     client: ThordataClient,
     query: str,
     num: int,
-    location: Optional[str] = None,
+    gl: Optional[str] = None,
+    hl: Optional[str] = None,
+    topic_token: Optional[str] = None,
+    publication_token: Optional[str] = None,
+    section_token: Optional[str] = None,
+    story_token: Optional[str] = None,
+    so: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
     """
-    Call Thordata SERP API in 'news' mode and normalize results.
-
-    Note: The exact response structure may vary; we try 'news_results' first
-    and fall back to 'organic' if needed.
+    Call Thordata SERP API with engine=google_news and the parameters
+    defined in the official documentation.
     """
-    extra_params: Dict[str, Any] = {"type": "news"}  # news mode
-    if location:
-        extra_params["location"] = location
+    # Build kwargs according to docs
+    kwargs: Dict[str, Any] = {}
+
+    if gl:
+        kwargs["gl"] = gl
+    if hl:
+        kwargs["hl"] = hl
+    if topic_token:
+        kwargs["topic_token"] = topic_token
+    if publication_token:
+        kwargs["publication_token"] = publication_token
+    if section_token:
+        kwargs["section_token"] = section_token
+    if story_token:
+        kwargs["story_token"] = story_token
+    if so:
+        kwargs["so"] = so
 
     print(f"Searching Google News for: {query!r}")
+    if kwargs:
+        print("Parameters:", {k: v for k, v in kwargs.items() if v is not None})
+
+    # 按官方示例使用 engine=google_news
     results = client.serp_search(
         query=query,
-        engine=Engine.GOOGLE,
+        engine="google_news",
         num=num,
-        **extra_params,
+        **kwargs,
     )
 
-    # Prefer dedicated news_results if available
-    raw_list: List[Dict[str, Any]] = results.get("news_results") or results.get("organic") or []
+    # 如果有 code 字段且不是 200，优先报错
+    if isinstance(results, dict) and results.get("code") and results.get("code") != 200:
+        raise RuntimeError(
+            f"SERP API error: code={results.get('code')} msg={results.get('msg')}"
+        )
 
-    cleaned: List[Dict[str, Any]] = []
+    # 1. 优先使用 'news' 字段（你返回里就是这个）
+    raw_list = results.get("news")
+
+    # 2. 若 'news' 为空，再尝试 'news_results' / 'organic' / 'data'
+    if not isinstance(raw_list, list) or not raw_list:
+        for key in ("news_results", "organic", "data"):
+            value = results.get(key)
+            if isinstance(value, list) and value:
+                print(f"Using key '{key}' as result list.")
+                raw_list = value
+                break
+
+    if not isinstance(raw_list, list):
+        raw_list = []
+
+    articles: List[Dict[str, Any]] = []
     for item in raw_list:
-        cleaned.append(
+        articles.append(
             {
                 "title": item.get("title"),
                 "link": item.get("link"),
                 "source": item.get("source") or item.get("news_source"),
-                "snippet": item.get("snippet"),
+
                 "date": item.get("date") or item.get("published_time"),
             }
         )
 
-    print(f"Received {len(cleaned)} results.")
-    return cleaned
+    print(f"Received {len(articles)} results.")
+    return articles
 
+
+# -------------------------------------------------------------
+# Main
+# -------------------------------------------------------------
 
 def main() -> None:
     args = parse_args()
     client = build_client()
 
     articles = search_google_news(
-        client,
+        client=client,
         query=args.query,
         num=args.num,
-        location=args.location,
+        gl=args.gl,
+        hl=args.hl,
+        topic_token=args.topic_token,
+        publication_token=args.publication_token,
+        section_token=args.section_token,
+        story_token=args.story_token,
+        so=args.so,
     )
 
     if not articles:
