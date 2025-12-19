@@ -31,7 +31,9 @@ def test_scrape_news_runs_offline(httpserver: HTTPServer, tmp_path: Path) -> Non
             ],
             "organic": [],
         }
-        return Response(json.dumps(payload), status=200, content_type="application/json")
+        return Response(
+            json.dumps(payload), status=200, content_type="application/json"
+        )
 
     httpserver.expect_request("/request", method="POST").respond_with_handler(handler)
     base_url = httpserver.url_for("/").rstrip("/").replace("localhost", "127.0.0.1")

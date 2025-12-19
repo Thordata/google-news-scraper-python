@@ -82,6 +82,7 @@ def build_client() -> ThordataClient:
 # CLI parsing
 # -------------------------------------------------------------
 
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Google News scraper using Thordata SERP API (engine=google_news)",
@@ -172,6 +173,7 @@ def parse_args() -> argparse.Namespace:
 # SERP call: engine=google_news
 # -------------------------------------------------------------
 
+
 def search_google_news(
     client: ThordataClient,
     query: str,
@@ -259,6 +261,7 @@ def search_google_news(
 # -------------------------------------------------------------
 # Main
 # -------------------------------------------------------------
+
 
 def main() -> None:
     args = parse_args()
