@@ -1,4 +1,4 @@
-thordata-sdk>=1.3.0
-python-dotenv
-pandas
-colorama
+thordata-sdk>=1.7.0
+python-dotenv>=1.0.0
+pandas>=2.0.0
+colorama>=0.4.6

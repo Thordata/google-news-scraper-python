@@ -15,139 +15,75 @@
 
 ---
 
+## 🎯 Quick Start: AI News Briefing
+
+**Get the latest AI industry news with one command!**
+
+```bash
+# One command to get latest AI news
+python main.py --ai-brief
+
+# Get AI breakthroughs only
+python main.py --ai-breakthroughs --limit 10
+
+# Export to CSV
+python main.py --ai-brief --format csv --limit 30
+```
+
+This feature automatically searches multiple AI-related keywords and combines the results into a comprehensive briefing. Perfect for staying updated on the latest AI developments!
+
+---
+
 ## ⚡ Features
 
-*   **📰 Real-Time Data**: Get the latest news as it happens (no cache lag).
+*   **🤖 AI News Briefing**: One-command feature to get latest AI industry news and breakthroughs
+*   **📰 Real-Time Data**: Get the latest news as it happens (no cache lag when needed).
+*   **⚡ Smart Caching**: Automatic response caching (5min TTL) for instant repeated queries
+*   **🔄 Auto Retry**: Exponential backoff retry mechanism for reliable requests
+*   **📊 Progress Indicators**: Visual feedback for long-running operations
 *   **🌍 Global Coverage**: Support for any country (`us`, `uk`, `jp`, `cn`, etc.) and language.
-*   **🚀 High Speed**: Synchronous API response (<2s average), no polling required.
+*   **🚀 High Speed**: Synchronous API response (<3s average), cached responses <0.1s
 *   **🧹 Clean Output**: Automatically parses complex JSON into simple lists (JSON/CSV).
 *   **🛡️ No Bans**: Full proxy rotation and anti-bot handling managed by Thordata.
+*   **🔧 Advanced API**: Uses latest `SerpRequest` and `serp_search_advanced` for better control.
+*   **📱 Device Support**: Specify device type (desktop, mobile, tablet) for different results.
+*   **🌐 Language Control**: Fine-tune language settings for localized results.
+
+---
 
 ## 📦 Sample Output
 
 ```json
 [
   {
-    "title": "Musk says Tesla is moving Full Self-Driving to a monthly subscription",
-    "source": "CNBC",
-    "date": "21 hours ago",
-    "snippet": null,
-    "link": "https://www.cnbc.com/2026/01/14/musk-tesla-full-self-driving-subscription-fsd.html",
-    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAllBMVEUAHloADFQAHFkAGFcAGVMAAE4PJl83RnsjO2gAAFIAAFUAGVYAEVkGHV0GIFUGHlUAF1wkMmC2ucqipLeMmK/T19X8/Pp8iJ+yvsxSW4NZX3q8x813gJYACkwAAETW3eZOVG1YZITL1dmxvMK9vsTg4+lGTGdiZonM1N+Gh5bc5OUAGGObpbqGj7Job5CuqcC+uc/BxtMZTvwUAAAAdElEQVQYlWNgoBZgYmZG4rEwsrKxc3BycfNw8vDyMfALCAoJi4iKiUtISknLyPIzMMjJKyiKKikrCauoCioKMDDws8qrKcqrayhpamnxKnIDjdDmkNDRldPTN9CTMpQBms3EwMTIysjLzCjLCDKUjWouRwYA81AHiFv0f4YAAAAASUVORK5CYII="
-  },
-  {
-    "title": "Tesla’s Full Self-Driving System Will Only Be Available Via Subscription, Musk Says",
-    "source": "The Wall Street Journal",
-    "date": "19 hours ago",
-    "snippet": null,
-    "link": "https://www.wsj.com/business/autos/teslas-full-self-driving-system-will-only-be-available-via-subscription-musk-says-87a37904?gaa_at=eafs&gaa_n=AWEtsqcBcJlMRjB4Qj-YWvg0eVlUxx5XzvTDlwAMlvgmX2iTeiEl_Ari3vO3&gaa_ts=6968e56c&gaa_sig=Y3WgajAaNUO9NyVGt-c2i84-OkdUjh1N3v_4V2e1ygdM4CkFFH-bKSkOa9SJX9j3MNnUTwRv9-zjj63QIUzVKw%3D%3D",
-    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAYFBMVEX////c3NwAAAC+vr4mJia6urqRkZG0tLTm5ubf39/IyMj7+/uHh4dBQUGsrKxXV1ednZ3w8PA8PDx2dnYcHByjo6PNzc0PDw8yMjJJSUmNjY0qKir19fV1dXWmpqbLy8uWKfoBAAAAc0lEQVQYla3Pyw6DIBCF4V+mgIBY0KpYe3n/tyxt6sZl00kmOfkWkzPwj4m6P2Nc0pY86AqjbS+In5jg5CrYMShkXmgq1MWVJjqhrHwB5Y2pYbnuEJNXtGRF2D7Q9XlDbgz3R3kfxc50+CRWnuuhUvjtkxcBwwPrTWhR4QAAAABJRU5ErkJggg=="
-  },
-  {
-    "title": "Tesla Stock Drops. Elon Musk Makes a Surprise Decision on FSD.",
-    "source": "Barron's",
-    "date": "16 hours ago",
-    "snippet": null,
-    "link": "https://www.barrons.com/articles/tesla-stock-elon-musk-full-self-driving-c641e657?gaa_at=eafs&gaa_n=AWEtsqcX5Q5cHorSQ8AiRzIS5OkJPYQskqyFwOEC1T-NyU7geXPI_4i4Mnl2&gaa_ts=6968e56c&gaa_sig=gb4gi9eXeNVCUO-fE86ISNAndc_djddZbe15NKqTG6s8Jt2usDGAuoDunt0xtDu5JfgSVajNbPPTn4kGZS-FOg%3D%3D",
-    "thumbnail": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwEBBgEIBwgKCgkBDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNDg8PGjclHxkrKys3NysrNys3KzcrNysrNzcrKysrKzcrKys3KzcrKys3Nys3KzcrKzcrNys3KzcrN//AABEIABAAEAMBIgACEQEDEQH/xAAWAAADAAAAAAAAAAAAAAAAAAADBAb/xAAnEAABAgQEBgMAAAAAAAAAAAABAgMEBxETAAUGCBIhIjFBoRdRgf/EABUBAQEAAAAAAAAAAAAAAAAAAAMC/8QAFREBAQAAAAAAAAAAAAAAAAAAAEH/2gAMAwEAAhEDEQA/AI3ImNLTLRuauQ19ctoRTzSeIjqCkjwe1CcL5+xpSWTsorbK4dzXsOlx1hZJtqJPYnwQAf3A8pjZZy/Z3OoiluJ+YYUsoKEcVCVJNTzHLpwDM8x05qzLdt0AwVuJkBcN1aaElZBoB9Cns4sMf//Z"
-  },
-  {
-    "title": "The $1 trillion reason Elon Musk ended Tesla FSD purchases",
-    "source": "Business Insider",
-    "date": "16 hours ago",
-    "snippet": null,
-    "link": "https://www.businessinsider.com/elon-musk-ended-tesla-fsd-purchases-subscriptions-trillion-compensation-2026-1",
-    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAMFBMVEUAJf8AJf8AG/8AD/////+mq/8AAP9rc//i4//Lzf/t7v8+TP+3u/9bZP+Plf+Ah/89RQUyAAAAAXRSTlP+GuMHfQAAAGFJREFUGJV9z8kOgCAMBFDoRsvm//+tdQkBo85t3qGZhhCXhEd3eQNAT4yIcAEkZu6InQucgEyeLJnSgFoyRZ1AjUxmyEq6AHtrMxyBcRQ2M6tFqjW4h4mIj0KBr+m/74Ydk4UDCWigc2cAAAAASUVORK5CYII="
-  },
-  {
-    "title": "Tesla’s India Letdown Spurs Discounts on Unsold Model Y SUVs",
-    "source": "Bloomberg.com",
-    "date": "21 hours ago",
-    "snippet": null,
-    "link": "https://www.bloomberg.com/news/articles/2026-01-14/tesla-s-india-letdown-spurs-discounts-on-unsold-model-y-suvs",
-    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB00lEQVQ4jXWTv4viUBDHP8aAwUbBJoWgrYjVdgtCuNrirhfkSq1s7PWfUJurrveusYjFso2ohZ3IbiNaKJbPQvwRzVyxeRJv3YEhMG/m+z4zmQf3ZgBPQBt4A06AB7wDHeA5yHloyaDwAMgXfgK6QEIXRYJvAvgLOLZtk81m75SVUiwWC87nsw69Aj8ApbG7+pZqtSqXy+XmnufJ8XiUyWQi+Xw+TNPW7TwHaAJIrVYTEZF+vy+1Wk3q9bq4riu+78tgMJBoNKoFDsG86IT71ALNZvMWS6VSopSS5XIplmXdURjAt0cTNU0Ty7KIx+M4jkM8Hmc0GoXngK71HhHsdjtZrVay3W7F8zxxXVds2/70VwzAf0SwXC4Zj8cMh0Pm8znFYpFWq4VpmuE0Az4W5hNBo9G4xWKxmPR6PfE8TxzHCRO8G8DLI4KwnU4n1us1pmmSTqfDRy8m8Av4CVjhk1wuR6lUwjAM8vk85XKZ/X7PdDrVKWfgt+6jHW7B933xfV+u16tcr1e5XC6y2WykUqlIJBLR+F3A0KucBP4ATiaToVAo3LWglGI2m6GU0qFX4DuwC+clAtXbVj7wQ0Cb/GpeBh+r3eHjCXuB4FtQ+MR/z/kfQmkSTZadhgoAAAAASUVORK5CYII="
-  },
-  {
-    "title": "Tesla makes two big interior changes to several Model Y vehicles",
-    "source": "Teslarati",
-    "date": "1 day ago",
-    "snippet": null,
-    "link": "https://www.teslarati.com/tesla-makes-big-interior-change-several-model-y-vehicles/",
-    "thumbnail": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgBBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3NzcrNzc3Nzc3Nzc3N//AABEIABAAEAMBEQACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAEBwH/xAAiEAACAQMCBwAAAAAAAAAAAAABAgMABBEGEgUTFyEyQYH/xAAYAQACAwAAAAAAAAAAAAAAAAABAwACBv/EAB0RAAICAQUAAAAAAAAAAAAAAAABAgMEERITQVH/2gAMAwEAAhEDEQA/AKTCkmsH2RKWas/CMrHpFFRM9o+hbYyzMudwCqDmn2USrr3SCFsbuHRscom3sJMAqnY4Gff2kY98K09/fgEzL/iHUUqqJy4k8VoZGVytJLRIjZ//2Q=="
-  },
-  {
-    "title": "Tesla offering discounts to clear out excess inventory of Indian Model Y SUVs (TSLA:NASDAQ)",
-    "source": "Seeking Alpha",
-    "date": "19 hours ago",
-    "snippet": null,
-    "link": "https://seekingalpha.com/news/4539163-tesla-offering-discounts-to-clear-out-excess-inventory-of-indian-model-y-suvs",
-    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB8UlEQVQ4jZWSP2hTURTGf/fePBWaxFIt5aW2YIlFqlC1SIei4iAI4iIuLqJ1M1PRzbnoYgdBR9csncRJHIyu/ntIa1V0MGpSU2ObPDHt+3Md7st7JAHFA4fzne/c853LuVfoGyMWdvkCgmsEYgyl0/zNAuGi9Cc0t6mMFIW+w0UQdxH/aOw2LVzQhRShmEOTBvFf/UAaIeZSSPIEEeUpyI7C6GkYOgitDXi7CHUHrADs87D+AhqfTS7JS1oqjaeS5lP3TPPSA9gow8l5GJiEzBE4eiWZ7yloqXQKz0rImXkTH98Cvwblksmnr5tYfQU/KkDSI+PpQxMwfAzeP4ffdWL+zUPI7ofxs/CxlPCRp/C3RysZg75+WPtCzAE0f0GjZnBlubMGpPCj63i7Eta36LFGDX5udVw/EogU176buHtPzxSyg0agmwckmxI2JVS/QfUDTJwBZRPzueOQGTQiyobhKeNRXeir4zqWy0/DpZvwdRmeLkJWwqFzsOJA307IDphzziNYegKA0LOHm1hbyTe298GBGbD3QqMOK8/g3Uvoz8CJWXOmdB/Wm+Btc4W+PPUaFUzGAmH0LaXqxO1aGwMEypEgFgiFi2+Z7Yc7jHfjdh5j4YJYkORWi2hVQIQO0nd736977b6LCB20KpBbLf4Bwla1Zn2uvIQAAAAASUVORK5CYII="
-  },
-  {
-    "title": "Tesla launches a seven-seat version of the 2026 Model Y",
-    "source": "Engadget",
-    "date": "1 day ago",
-    "snippet": null,
-    "link": "https://www.engadget.com/transportation/evs/tesla-launches-a-seven-seat-version-of-the-2026-model-y-130039385.html",
-    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAGFBMVEUAAAD///8AAAAdHR2AgIA/Pz/u7u6KiopMe+7WAAAAAXRSTlP+GuMHfQAAADtJREFUGJVjYGBCBQxkCjBCABtCgJUZCFgZEQLMICYzkgBEOyO6GUgC7CwgwIxkKBPQUAxr2ShyOjIAAATxAe5S4Oc4AAAAAElFTkSuQmCC"
-  },
-  {
-    "title": "Tesla taps Samsung for 5G modems amid plans of Robotaxi ramp: report",
-    "source": "Teslarati",
+    "title": "OpenAI Announces GPT-5 with Revolutionary Capabilities",
+    "source": "TechCrunch",
     "date": "2 hours ago",
-    "snippet": null,
-    "link": "https://www.teslarati.com/tesla-taps-samsung-for-5g-modems-amid-plans-of-robotaxi-ramp-report/",
-    "thumbnail": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgBBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3NzcrNzc3Nzc3Nzc3N//AABEIABAAEAMBEQACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAEBwH/xAAiEAACAQMCBwAAAAAAAAAAAAABAgMABBEGEgUTFyEyQYH/xAAYAQACAwAAAAAAAAAAAAAAAAABAwACBv/EAB0RAAICAQUAAAAAAAAAAAAAAAABAgMEERITQVH/2gAMAwEAAhEDEQA/AKTCkmsH2RKWas/CMrHpFFRM9o+hbYyzMudwCqDmn2USrr3SCFsbuHRscom3sJMAqnY4Gff2kY98K09/fgEzL/iHUUqqJy4k8VoZGVytJLRIjZ//2Q=="
+    "snippet": "OpenAI has unveiled GPT-5, featuring unprecedented reasoning capabilities...",
+    "link": "https://techcrunch.com/...",
+    "thumbnail": "data:image/png;base64,..."
   },
   {
-    "title": "Tesla Stock Rises on Delivery Growth and AI Investments",
-    "source": "Yahoo Finance",
-    "date": "1 day ago",
-    "snippet": null,
-    "link": "https://finance.yahoo.com/news/tesla-stock-rises-delivery-growth-174307879.html",
-    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAJ1BMVEX///8De2ZirZ/f7+zA3tkji3mBvbITg3ChzcZCnIyw1s/Q5uNxtanGthbwAAAATElEQVQYlX2OSQ7AMAgDMWHJ0v+/t/RmIaW+eTQyiNwyASiDVcCoj+rOghaYTcD4m/QmWPXFwlbVzcCCfZEA8jD4bgaDbF/J8XzklhdtCwDo22XHCQAAAABJRU5ErkJggg=="
-  },
-  {
-    "title": "Where Will Tesla Stock Be in 1 Year?​",
-    "source": "The Motley Fool",
-    "date": "3 hours ago",
-    "snippet": null,
-    "link": "https://www.fool.com/investing/2026/01/15/where-will-tesla-stock-be-in-1-year/",
-    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABjElEQVQ4jdXQv0uVcRTH8df3eR7utaIflhElebsQ0lAiETUI7RWujYVokkNDNbQHQkQRURAkQVhTBEFLa0tDDbXcpTK4gjcJasjyanaf59ugksj9B/xM53DO+3M+HDa8wmoxW7m63MeQCnLEvdO3wKPuBxACabQ8G26MLRt8rV6RtFLoxgUcxSc8nlnaWZtPoi+h8wjOoxfvMYFGkQTZCrwHD3F6TbrBntKPkZf5wZCIEyswDOIYhpMifktCkcDoOhh6F2X3O7TurYFXdQajIZLFpKhgAHewFWexLSAX+lJR/P+sOTzDLwzEoCeLRTgQQrxrofQqbvmThhjquI5k3dUCN2Nwo9Us51nH0qlYhGrWeem1oll6q5WYe3IixyTOtYk9hckQ5ScvvpBmrXflzYuHs3J/Y5x4DW9+Pj0OsyGGWhuDWgzmUar0f1zatP33IYxnoiFCA4Qo5GlLiLdRR2UFnsZzNFF8r++zv+/zBwwFbdSoXrYraar/7Upr+W5TduRdYcHIzFi79Y2uf3u8hJX5NVwzAAAAAElFTkSuQmCC"
-  },
-  {
-    "title": "How Tesla Stock Could Become a ‘DREAM’ Come True",
-    "source": "Barron's",
-    "date": "2 days ago",
-    "snippet": null,
-    "link": "https://www.barrons.com/articles/tesla-stock-price-musk-ai-c7ba43a1?gaa_at=eafs&gaa_n=AWEtsqdPg4eD1DAzgpgRTNJpp-Q1rwodTXPJuhSTD5h4VgNBmCbwV928CE3P&gaa_ts=6968e56c&gaa_sig=Jcl6BqLYw37Es6DTtDHNx__KJF4sv95-Sf8V_pIq2GAaVhaTmG5QeY5UuRSjwiCp1k93xEqm5j0LBJUsKjOGhg%3D%3D",
-    "thumbnail": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwEBBgEIBwgKCgkBDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNDg8PGjclHxkrKys3NysrNys3KzcrNysrNzcrKysrKzcrKys3KzcrKys3Nys3KzcrKzcrNys3KzcrN//AABEIABAAEAMBIgACEQEDEQH/xAAWAAADAAAAAAAAAAAAAAAAAAADBAb/xAAnEAABAgQEBgMAAAAAAAAAAAABAgMEBxETAAUGCBIhIjFBoRdRgf/EABUBAQEAAAAAAAAAAAAAAAAAAAMC/8QAFREBAQAAAAAAAAAAAAAAAAAAAEH/2gAMAwEAAhEDEQA/AI3ImNLTLRuauQ19ctoRTzSeIjqCkjwe1CcL5+xpSWTsorbK4dzXsOlx1hZJtqJPYnwQAf3A8pjZZy/Z3OoiluJ+YYUsoKEcVCVJNTzHLpwDM8x05qzLdt0AwVuJkBcN1aaElZBoB9Cns4sMf//Z"
-  },
-  {
-    "title": "Tesla: The EV Dream Is Over (NASDAQ:TSLA)",
-    "source": "Seeking Alpha",
-    "date": "22 hours ago",
-    "snippet": null,
-    "link": "https://seekingalpha.com/article/4859669-tesla-the-ev-dream-is-over",
-    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB8UlEQVQ4jZWSP2hTURTGf/fePBWaxFIt5aW2YIlFqlC1SIei4iAI4iIuLqJ1M1PRzbnoYgdBR9csncRJHIyu/ntIa1V0MGpSU2ObPDHt+3Md7st7JAHFA4fzne/c853LuVfoGyMWdvkCgmsEYgyl0/zNAuGi9Cc0t6mMFIW+w0UQdxH/aOw2LVzQhRShmEOTBvFf/UAaIeZSSPIEEeUpyI7C6GkYOgitDXi7CHUHrADs87D+AhqfTS7JS1oqjaeS5lP3TPPSA9gow8l5GJiEzBE4eiWZ7yloqXQKz0rImXkTH98Cvwblksmnr5tYfQU/KkDSI+PpQxMwfAzeP4ffdWL+zUPI7ofxs/CxlPCRp/C3RysZg75+WPtCzAE0f0GjZnBlubMGpPCj63i7Eta36LFGDX5udVw/EogU176buHtPzxSyg0agmwckmxI2JVS/QfUDTJwBZRPzueOQGTQiyobhKeNRXeir4zqWy0/DpZvwdRmeLkJWwqFzsOJA307IDphzziNYegKA0LOHm1hbyTe298GBGbD3QqMOK8/g3Uvoz8CJWXOmdB/Wm+Btc4W+PPUaFUzGAmH0LaXqxO1aGwMEypEgFgiFi2+Z7Yc7jHfjdh5j4YJYkORWi2hVQIQO0nd736977b6LCB20KpBbLf4Bwla1Zn2uvIQAAAAASUVORK5CYII="
-  },
-  {
-    "title": "Automakers like Ford and GM are jumping into a whole new business where Tesla is a serious player",
-    "source": "CNBC",
-    "date": "2 hours ago",
-    "snippet": null,
-    "link": "https://www.cnbc.com/2026/01/15/ford-gm-tesla-energy-storage.html",
-    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAllBMVEUAHloADFQAHFkAGFcAGVMAAE4PJl83RnsjO2gAAFIAAFUAGVYAEVkGHV0GIFUGHlUAF1wkMmC2ucqipLeMmK/T19X8/Pp8iJ+yvsxSW4NZX3q8x813gJYACkwAAETW3eZOVG1YZITL1dmxvMK9vsTg4+lGTGdiZonM1N+Gh5bc5OUAGGObpbqGj7Job5CuqcC+uc/BxtMZTvwUAAAAdElEQVQYlWNgoBZgYmZG4rEwsrKxc3BycfNw8vDyMfALCAoJi4iKiUtISknLyPIzMMjJKyiKKikrCauoCioKMDDws8qrKcqrayhpamnxKnIDjdDmkNDRldPTN9CTMpQBms3EwMTIysjLzCjLCDKUjWouRwYA81AHiFv0f4YAAAAASUVORK5CYII="
+    "title": "Google DeepMind Breakthrough in Protein Folding",
+    "source": "Nature",
+    "date": "5 hours ago",
+    "snippet": "New AI model predicts protein structures with 95% accuracy...",
+    "link": "https://nature.com/...",
+    "thumbnail": "data:image/png;base64,..."
   }
 ]
 ```
 
-## 🚀 Quick Start (2 Minutes)
+---
 
-### 1. Get Token
+## 🚀 Installation & Setup
+
+### 1. Get Your Token
+
 Get your **free** scraping token from the [Thordata Dashboard](https://www.thordata.com/?utm_source=github&utm_medium=readme&utm_campaign=gnews_scraper).
 
-### 2. Install
+### 2. Install Dependencies
+
 ```bash
 git clone https://github.com/Thordata/google-news-scraper-python.git
 cd google-news-scraper-python
@@ -155,29 +91,229 @@ pip install -r requirements.txt
 ```
 
 ### 3. Configure
+
 Copy `.env.example` to `.env` and fill in your token:
+
 ```ini
 THORDATA_SCRAPER_TOKEN=your_token_here
 ```
 
-### 4. Run Scraper
+---
 
-**Search for a topic:**
+## 💡 Usage Examples
+
+### AI News Briefing (Featured!)
+
 ```bash
-# Default JSON output
-python main.py "Elon Musk"
+# Get comprehensive AI news briefing
+python main.py --ai-brief
 
-# CSV output, limit 50, region UK
-python main.py "Crypto Market" --limit 50 --country uk --format csv
+# Get AI breakthroughs only
+python main.py --ai-breakthroughs --limit 15
+
+# AI news with custom settings
+python main.py --ai-brief --limit 50 --country uk --format csv
 ```
 
-Data will be saved to the `output/` directory.
+### Basic Search
+
+```bash
+# Simple search
+python main.py "Artificial Intelligence"
+
+# Search with custom limit
+python main.py "Crypto Market" --limit 50
+```
+
+### Advanced Search
+
+```bash
+# Search with country and language
+python main.py "Tesla News" --country uk --language en
+
+# Search with device type
+python main.py "AI Updates" --device mobile --no-cache
+
+# Full example with all options
+python main.py "Bitcoin Price" \
+  --limit 100 \
+  --country jp \
+  --language ja \
+  --device desktop \
+  --format csv \
+  --no-cache
+```
+
+---
+
+## 📋 Command Line Arguments
+
+| Argument | Description | Default |
+|----------|-------------|---------|
+| `query` | Search topic (required unless using `--ai-brief`) | - |
+| `--ai-brief` | Get latest AI industry news (one-command feature) | False |
+| `--ai-breakthroughs` | Get latest AI breakthroughs only | False |
+| `--limit` | Maximum number of results | 20 |
+| `--country` | Country code (`us`, `uk`, `jp`, `cn`, etc.) | `us` |
+| `--language` | Language code (`en`, `zh`, `ja`, etc.) | Auto |
+| `--device` | Device type (`desktop`, `mobile`, `tablet`) | Auto |
+| `--format` | Output format (`json`, `csv`) | `json` |
+| `--no-cache` | Bypass cache for fresh results | False |
+
+---
+
+## 🎨 Use Cases
+
+### 1. Daily AI News Monitoring
+```bash
+# Run this daily to stay updated
+python main.py --ai-brief --limit 30 --format csv
+```
+
+### 2. Research & Analysis
+```bash
+# Collect news for specific research topics
+python main.py "machine learning research" --limit 100 --format csv
+```
+
+### 3. Market Intelligence
+```bash
+# Track industry news by country
+python main.py "tech industry" --country us --limit 50
+python main.py "tech industry" --country uk --limit 50
+```
+
+### 4. Content Aggregation
+```bash
+# Aggregate news from multiple sources
+python main.py "climate change" --limit 50 --format json
+```
+
+### 5. Competitive Intelligence
+```bash
+# Monitor competitor news
+python main.py "competitor name" --no-cache --limit 20
+```
+
+---
+
+## 📁 Output Format
+
+Results are saved to the `output/` directory in your chosen format:
+
+- **JSON**: Structured data with all fields
+- **CSV**: Spreadsheet-friendly format
+
+Each file is named based on your query: `news_{query}.{format}`
+
+---
+
+## 🔧 Advanced Configuration
+
+### Environment Variables
+
+```ini
+THORDATA_SCRAPER_TOKEN=your_token_here
+```
+
+### Programmatic Usage
+
+```python
+from src.scraper import GoogleNewsScraper
+from src.ai_news import AINewsBriefing
+
+# Basic search (with automatic caching)
+scraper = GoogleNewsScraper()
+results = scraper.search("AI", num=20, country="us")  # Cached for 5 minutes
+
+# Bypass cache for fresh results
+results = scraper.search("AI", num=20, no_cache=True)
+
+# Clear cache manually
+scraper.clear_cache()
+
+# AI news briefing
+ai_briefing = AINewsBriefing()
+briefing = ai_briefing.get_latest_ai_news(num=30)
+```
+
+### Performance Features
+
+**Caching**:
+- Automatic caching of API responses
+- Default TTL: 5 minutes
+- Instant response for cached queries (<0.1s)
+- Manual cache control available
+
+**Retry Mechanism**:
+- Automatic retry on transient failures
+- Exponential backoff (1s, 2s, 4s delays)
+- Up to 3 retry attempts
+- Prevents cascading failures
+
+---
+
+## 🌟 Why This Scraper?
+
+### Compared to Other Solutions
+
+| Feature | This Scraper | Others |
+|---------|-------------|--------|
+| **AI News Briefing** | ✅ One-command feature | ❌ Manual keyword setup |
+| **Smart Caching** | ✅ Automatic (5min TTL) | ❌ No caching |
+| **Auto Retry** | ✅ Exponential backoff | ⚠️ Single attempt |
+| **Progress Indicators** | ✅ Visual feedback | ❌ No feedback |
+| **Real-time Data** | ✅ <3s response, <0.1s cached | ⚠️ Varies |
+| **No Bans** | ✅ Managed by Thordata | ⚠️ Risk of blocking |
+| **Global Coverage** | ✅ 195+ countries | ⚠️ Limited |
+| **Easy Setup** | ✅ 2 minutes | ⚠️ Complex |
+| **Output Formats** | ✅ JSON + CSV | ⚠️ Limited |
+| **Error Handling** | ✅ Robust with retries | ⚠️ Basic |
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
 ## 📄 License
 
 MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+## 🙏 Acknowledgments
+
+* Powered by [Thordata](https://www.thordata.com) SERP API
+* Built with ❤️ by the Thordata Developer Team
+
+---
+
+## 📞 Support
+
+* **Documentation**: Check this README
+* **Issues**: [GitHub Issues](https://github.com/Thordata/google-news-scraper-python/issues)
+* **Email**: support@thordata.com
+
+---
+
+## 📄 License
+
+MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+## 📚 Additional Documentation
+
+* [CHANGELOG.md](CHANGELOG.md) - Version history and changes
 
 ---
 
