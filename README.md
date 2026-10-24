@@ -44,7 +44,7 @@ This feature automatically searches multiple AI-related keywords and combines th
 *   **🌍 Global Coverage**: Support for any country (`us`, `uk`, `jp`, `cn`, etc.) and language.
 *   **🚀 High Speed**: Synchronous API response (<3s average), cached responses <0.1s
 *   **🧹 Clean Output**: Automatically parses complex JSON into simple lists (JSON/CSV).
-*   **🛡️ No Bans**: Full proxy rotation and anti-bot handling managed by Thordata.
+*   **🌐 Managed Requests:** Uses Thordata's SERP API and proxy infrastructure for request handling.
 *   **🔧 Advanced API**: Uses latest `SerpRequest` and `serp_search_advanced` for better control.
 *   **📱 Device Support**: Specify device type (desktop, mobile, tablet) for different results.
 *   **🌐 Language Control**: Fine-tune language settings for localized results.
@@ -304,6 +304,31 @@ MIT License. See [LICENSE](LICENSE) for details.
 * **Email**: support@thordata.com
 
 ---
+
+## What This Example Does Not Collect
+
+This repository is an example client for authorized Thordata SERP API requests. It does not include Google account credentials, browser cookies, private sessions, or local browser automation.
+
+The example does not grant rights to collect, reuse, train on, or redistribute third-party news content. Use it only for lawful and authorized workflows.
+
+Never place API keys, private URLs, personal information, or private data in source files, logs, README files, or commits.
+
+## Failure Behavior
+
+Requests may fail because of invalid credentials, unsupported parameters, rate limits, endpoint restrictions, or temporary service errors.
+
+When a request fails, treat the response as an error rather than valid news data. Check the terminal output and returned API response for details. Exact error codes and limits depend on the account and endpoint.
+
+## For Coding Assistants
+
+When modifying or running this example:
+
+- Read `.env.example` and keep credentials in environment variables.
+- Check the existing configuration before inventing request parameters.
+- Preserve the current SERP API request flow.
+- Never print or commit API keys, private URLs, or personal data.
+- Review returned headlines, sources, dates, and links before sharing them.
+- Treat returned news data as third-party data subject to applicable terms and usage restrictions.
 
 ## 📄 License
 
